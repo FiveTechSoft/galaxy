@@ -1,38 +1,37 @@
 # galaxy
-A modular and dynamic programming language inspired by the galactic structure, designed to model complex, adaptive, and hierarchical systems through interconnected nodes and natural mathematical patterns like Fibonacci and the golden ratio
+A modular and dynamic programming language inspired by the galactic structure, designed to model complex, adaptive, and hierarchical systems through interconnected nodes and natural mathematical patterns like Fibonacci and the golden ratio.
 
-Explicación de los Componentes
-1. Constantes
-PHI: El número áureo, usado para generar patrones espirales.
-MAX_CONNECTIONS: Un límite opcional para evitar ciclos infinitos o redes descontroladas.
+Explanation of the Components
 
-2. Estructuras de Datos
-GalacticNode: Representa un nodo en la galaxia. Incluye:
-id: Identificador único para el nodo.
-activation_value: Para sistemas que usen IA.
-data: Puntero genérico para almacenar información personalizada.
-links y link_count: Conexiones a otros nodos y su cantidad.
-process: Puntero a una función que define el comportamiento del nodo.
-Connection: Define las conexiones entre nodos, con un peso para modelar relaciones.
+Constants
 
-3. Funciones Principales
-Estas funciones son la base del lenguaje:
+PHI: The golden ratio, used to generate spiral patterns.
+MAX_CONNECTIONS: An optional limit to avoid infinite cycles or uncontrolled networks.
+Data Structures
 
-init_node: Inicializa un nodo con datos opcionales y una función asociada.
-connect_nodes: Establece conexiones entre nodos y define su peso.
-expand_galaxy_spiral: Crea nuevos nodos en una disposición espiral, según patrones de Fibonacci o ángulos áureos.
-propagate_data: Simula la propagación de datos a través de la galaxia, útil para implementar redes neuronales o sistemas de procesamiento.
-adjust_weights: Ajusta los pesos de las conexiones, útil para aprendizaje automático.
-free_node: Libera los recursos asociados a un nodo.
+GalacticNode: Represents a node in the galaxy. It includes:
+id: A unique identifier for the node.
+activation_value: For systems using AI.
+data: A generic pointer to store custom information.
+links and link_count: Connections to other nodes and their count.
+process: A pointer to a function that defines the node's behavior.
+Connection: Defines the connections between nodes, with a weight to model relationships.
+Main Functions These functions are the core of the language:
 
-4. Funciones Auxiliares
-calculate_distance: Determina la distancia entre nodos en diferentes capas.
-calculate_angle: Calcula el ángulo de posicionamiento usando el número áureo.
+init_node: Initializes a node with optional data and an associated function.
+connect_nodes: Establishes connections between nodes and defines their weight.
+expand_galaxy_spiral: Creates new nodes in a spiral arrangement, based on Fibonacci patterns or golden angles.
+propagate_data: Simulates the propagation of data through the galaxy, useful for implementing neural networks or processing systems.
+adjust_weights: Adjusts the weights of the connections, useful for machine learning.
+free_node: Frees the resources associated with a node.
+Auxiliary Functions
 
-main.c
-Este ejemplo inicializa un nodo central, expande la galaxia en tres capas, propaga datos desde el nodo central y finalmente libera la memoria.
+calculate_distance: Determines the distance between nodes in different layers.
+calculate_angle: Calculates the positioning angle using the golden ratio.
+main.c This example initializes a central node, expands the galaxy in three layers, propagates data from the central node, and finally frees the memory.
 
-Futuras Extensiones
-Algoritmos de aprendizaje: Implementar funciones específicas para aprendizaje supervisado o por refuerzo.
-Visualización: Añadir soporte para exportar la estructura en un formato visual como JSON o Graphviz.
-Conexiones asíncronas: Soporte para procesamiento paralelo o en tiempo real.
+Future Extensions
+
+Learning Algorithms: Implement specific functions for supervised or reinforcement learning.
+Visualization: Add support for exporting the structure in a visual format like JSON or Graphviz.
+Asynchronous Connections: Support for parallel or real-time processing.
