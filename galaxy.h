@@ -7,73 +7,71 @@
 #include <cmath>
 #include <functional>
 
-const double PHI = 1.61803398875;  // Número áureo
-const size_t MAX_CONNECTIONS = 100; // Límite de conexiones por nodo
+const double PHI = 1.61803398875;  // The Golden Ratio
+const size_t MAX_CONNECTIONS = 100; // Maximum connections per node
 
-// Declaración de la clase GalacticNode
+// Forward declaration of the GalacticNode class
 class GalacticNode;
 
-// Estructura que define una conexión entre nodos
+// Structure defining a connection between nodes
 struct Connection {
-    std::shared_ptr<GalacticNode> from;
-    std::shared_ptr<GalacticNode> to;
-    double weight;  // Peso de la conexión
+    std::shared_ptr<GalacticNode> from;  // The originating node
+    std::shared_ptr<GalacticNode> to;    // The destination node
+    double weight;  // The weight of the connection
 
     Connection(std::shared_ptr<GalacticNode> f, std::shared_ptr<GalacticNode> t, double w)
         : from(f), to(t), weight(w) {}
 };
 
-// Clase que representa un nodo galáctico
+// GalacticNode class representing a node in the galaxy
 class GalacticNode {
 public:
-    size_t id;                  // Identificador único para el nodo
-    double activation_value;    // Valor de activación (para IA)
-    void* data;                 // Datos personalizados del nodo
-    std::vector<std::shared_ptr<GalacticNode>> links;  // Conexiones a otros nodos
-    size_t link_count;          // Contador de conexiones
-    std::function<void(GalacticNode*)> process; // Función de procesamiento del nodo
+    size_t id;                  // Unique identifier for the node
+    double activation_value;    // Activation value (for AI systems)
+    void* data;                 // Pointer to store custom data
+    std::vector<std::shared_ptr<GalacticNode>> links;  // Connections to other nodes
+    size_t link_count;          // Number of active connections
+    std::function<void(GalacticNode*)> process; // Function to define node behavior
 
-    // Constructor
+    // Constructor for GalacticNode
     GalacticNode(size_t id, void* data = nullptr, std::function<void(GalacticNode*)> process = nullptr)
         : id(id), activation_value(0.0), data(data), link_count(0), process(process) {}
 
-    // Método para conectar nodos
+    // Connects this node to another node with a specific weight
     bool connect(std::shared_ptr<GalacticNode> to, double weight);
 
-    // Método para procesar el nodo
+    // Processes the node (executes its associated process function)
     void processNode() {
         if (process) {
             process(this);
         }
     }
 
-    // Método para ajustar el valor de activación
+    // Adjusts the activation value of the node
     void adjustActivation(double value) {
         activation_value += value;
     }
 
-    // Destructor
-    ~GalacticNode() {
-        // No es necesario liberar memoria manualmente debido a shared_ptr
-    }
+    // Destructor - No need to manually manage memory due to shared_ptr
+    ~GalacticNode() {}
 };
 
-// Función para expandir la galaxia en una espiral basada en Fibonacci o el número áureo
+// Function to expand the galaxy in a spiral pattern based on Fibonacci or the Golden Ratio
 std::vector<std::shared_ptr<GalacticNode>> expandGalaxySpiral(size_t num_layers);
 
-// Función para propagar datos a través de la galaxia (útil para redes neuronales o propagación de información)
+// Function to propagate data through the galaxy (useful for neural networks or information propagation)
 void propagateData(std::shared_ptr<GalacticNode> start_node);
 
-// Función para ajustar los pesos de las conexiones
+// Function to adjust the weights of connections
 void adjustWeights(std::shared_ptr<GalacticNode> node, double adjustment);
 
-// Función para calcular la distancia entre dos nodos (basada en sus posiciones en capas)
+// Function to calculate the distance between two nodes (based on their positions in layers)
 double calculateDistance(const GalacticNode& node1, const GalacticNode& node2);
 
-// Función para calcular el ángulo de un nodo basado en el número áureo
+// Function to calculate the angle of a node based on the Golden Ratio
 double calculateAngle(size_t node_id);
 
-// Función para crear un nodo y asociar su función de procesamiento
+// Function to initialize a node with an ID, optional data, and an optional processing function
 std::shared_ptr<GalacticNode> initNode(size_t id, void* data = nullptr, std::function<void(GalacticNode*)> process = nullptr);
 
 #endif // GALAXY_H
