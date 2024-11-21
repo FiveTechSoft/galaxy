@@ -1,66 +1,79 @@
 #ifndef GALAXY_H
 #define GALAXY_H
 
-#include <stddef.h>  // Para tipos de tamaño estándar (size_t).
-#include <stdbool.h> // Para tipos booleanos.
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cmath>
+#include <functional>
 
-// --------------------------------------------------------------------
-// Definiciones de constantes
-// --------------------------------------------------------------------
-#define PHI 1.61803398875 // Número áureo
-#define MAX_CONNECTIONS 100 // Máximo número de conexiones por nodo
+const double PHI = 1.61803398875;  // Número áureo
+const size_t MAX_CONNECTIONS = 100; // Límite de conexiones por nodo
 
-// --------------------------------------------------------------------
-// Estructuras de Datos
-// --------------------------------------------------------------------
+// Declaración de la clase GalacticNode
+class GalacticNode;
 
-// Estructura básica para un nodo en la galaxia.
-typedef struct GalacticNode {
-    size_t id;                     // Identificador único del nodo.
-    double activation_value;       // Valor de activación (para IA).
-    void *data;                    // Puntero genérico a datos.
-    struct GalacticNode **links;   // Lista de nodos conectados.
-    size_t link_count;             // Número de conexiones actuales.
-    void (*process)(struct GalacticNode *self); // Función asociada al nodo.
-} GalacticNode;
+// Estructura que define una conexión entre nodos
+struct Connection {
+    std::shared_ptr<GalacticNode> from;
+    std::shared_ptr<GalacticNode> to;
+    double weight;  // Peso de la conexión
 
-// Estructura para conexiones entre nodos.
-typedef struct Connection {
-    GalacticNode *from; // Nodo de origen.
-    GalacticNode *to;   // Nodo de destino.
-    double weight;      // Peso de la conexión (importancia).
-} Connection;
+    Connection(std::shared_ptr<GalacticNode> f, std::shared_ptr<GalacticNode> t, double w)
+        : from(f), to(t), weight(w) {}
+};
 
-// --------------------------------------------------------------------
-// Funciones Principales
-// --------------------------------------------------------------------
+// Clase que representa un nodo galáctico
+class GalacticNode {
+public:
+    size_t id;                  // Identificador único para el nodo
+    double activation_value;    // Valor de activación (para IA)
+    void* data;                 // Datos personalizados del nodo
+    std::vector<std::shared_ptr<GalacticNode>> links;  // Conexiones a otros nodos
+    size_t link_count;          // Contador de conexiones
+    std::function<void(GalacticNode*)> process; // Función de procesamiento del nodo
 
-// Inicializa un nodo galáctico.
-GalacticNode *init_node(size_t id, void *data, void (*process)(GalacticNode *self));
+    // Constructor
+    GalacticNode(size_t id, void* data = nullptr, std::function<void(GalacticNode*)> process = nullptr)
+        : id(id), activation_value(0.0), data(data), link_count(0), process(process) {}
 
-// Conecta dos nodos con un peso opcional.
-bool connect_nodes(GalacticNode *from, GalacticNode *to, double weight);
+    // Método para conectar nodos
+    bool connect(std::shared_ptr<GalacticNode> to, double weight);
 
-// Expande la galaxia añadiendo nodos en una disposición espiral.
-void expand_galaxy_spiral(GalacticNode *center, size_t layers, double base_distance);
+    // Método para procesar el nodo
+    void processNode() {
+        if (process) {
+            process(this);
+        }
+    }
 
-// Propaga información desde un nodo a sus conexiones.
-void propagate_data(GalacticNode *node, double input_value);
+    // Método para ajustar el valor de activación
+    void adjustActivation(double value) {
+        activation_value += value;
+    }
 
-// Ajusta los pesos de las conexiones de un nodo.
-void adjust_weights(GalacticNode *node, double error, double learning_rate);
+    // Destructor
+    ~GalacticNode() {
+        // No es necesario liberar memoria manualmente debido a shared_ptr
+    }
+};
 
-// Libera la memoria asociada a un nodo.
-void free_node(GalacticNode *node);
+// Función para expandir la galaxia en una espiral basada en Fibonacci o el número áureo
+std::vector<std::shared_ptr<GalacticNode>> expandGalaxySpiral(size_t num_layers);
 
-// --------------------------------------------------------------------
-// Funciones Auxiliares
-// --------------------------------------------------------------------
+// Función para propagar datos a través de la galaxia (útil para redes neuronales o propagación de información)
+void propagateData(std::shared_ptr<GalacticNode> start_node);
 
-// Calcula la distancia entre nodos según la capa.
-double calculate_distance(size_t layer);
+// Función para ajustar los pesos de las conexiones
+void adjustWeights(std::shared_ptr<GalacticNode> node, double adjustment);
 
-// Calcula el ángulo áureo para la expansión espiral.
-double calculate_angle(size_t layer);
+// Función para calcular la distancia entre dos nodos (basada en sus posiciones en capas)
+double calculateDistance(const GalacticNode& node1, const GalacticNode& node2);
+
+// Función para calcular el ángulo de un nodo basado en el número áureo
+double calculateAngle(size_t node_id);
+
+// Función para crear un nodo y asociar su función de procesamiento
+std::shared_ptr<GalacticNode> initNode(size_t id, void* data = nullptr, std::function<void(GalacticNode*)> process = nullptr);
 
 #endif // GALAXY_H
